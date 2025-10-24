@@ -1,0 +1,35 @@
+[Readme](./README.md)
+
+# Config project
+
+`launch.json`
+
+```
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Run api and front",
+      "configurations": ["api", "frontend"],
+      "stopAll": true
+    }
+  ],
+  "configurations": [
+    {
+      "name": "api",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/ecomerce.api/ecomerce.api.csproj",
+      "launchConfigurationId": "TargetFramework=;http"
+    },
+    {
+      "name": "frontend",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/ecomerce.frontend/ecomerce.frontend.csproj",
+      "launchConfigurationId": "TargetFramework=;http"
+    }
+  ]
+}
+
+```

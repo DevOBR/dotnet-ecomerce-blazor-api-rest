@@ -1,8 +1,7 @@
 [Dependencies](./dependencies.md)
+[Configurations](./configs.md)
 
-# Dependencies
-
-# dotnet-ecomers-blazor-api-rest
+# dotnet-ecomers-blazor-api-rest net 9
 
 A full-stack e-commerce project built with **.NET 8**, combining a **REST API**, **Blazor Server frontend**, **MudBlazor UI**, **JWT authentication**, **email confirmation**, and a **database layer**.  
 This repository provides a clean, scalable foundation for modern web applications.

@@ -21,4 +21,10 @@
     <ProjectReference Include="../ecomerce.shared/ecomerce.shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UnitOfWork/" />
+    <Folder Include="UnitOfWork/Implementations/" />
+    <Folder Include="UnitOfWork/Interfaces/" />
+  </ItemGroup>
+
 </Project>

@@ -6,11 +6,10 @@ namespace ecomerce.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CountriesController : GenericController<Country>
+public class CategoriesController : GenericController<Category>
 {
-    public CountriesController(IGenericUnitOfWork<Country> unitOfWork)
+    public CategoriesController(IGenericUnitOfWork<Category> unitOfWork)
         : base(unitOfWork)
     {
-
     }
 }

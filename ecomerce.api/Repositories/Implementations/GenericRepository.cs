@@ -17,13 +17,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         this.entity = this.dataContext.Set<T>();
     }
 
-    public async Task<ActionResponse<IEnumerable<T>>> GetAsync() => new ActionResponse<IEnumerable<T>>()
-    {
-        WasSuccess = true,
-        Result = await this.entity.ToListAsync()
-    };
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync()
+        => new ActionResponse<IEnumerable<T>>()
+        {
+            WasSuccess = true,
+            Result = await this.entity.ToListAsync()
+        };
 
-    public async Task<ActionResponse<T>> AddAsync(T entity)
+    public virtual async Task<ActionResponse<T>> AddAsync(T entity)
     {
         try
         {
@@ -46,7 +47,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
     }
 
-    public async Task<ActionResponse<T>> DeleteAsync(int id)
+    public virtual async Task<ActionResponse<T>> DeleteAsync(int id)
     {
         var row = await this.entity.FindAsync(id);
         if (row is null)
@@ -75,7 +76,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
     }
 
-    public async Task<ActionResponse<T>> GetAsync(int id)
+    public virtual async Task<ActionResponse<T>> GetAsync(int id)
     {
         var row = await this.entity.FindAsync(id);
         if (row is null)
@@ -93,9 +94,27 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         };
     }
 
-    public Task<ActionResponse<T>> UpdateAsync(T entity)
+    public virtual async Task<ActionResponse<T>> UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            this.dataContext.Update<T>(entity);
+            await this.dataContext.SaveChangesAsync();
+            return new ActionResponse<T>()
+            {
+                WasSuccess = true,
+                Result = entity
+            };
+        }
+        catch (DbUpdateException)
+        {
+            return DbUpdateExceptionActionResponse();
+        }
+        catch (Exception ex)
+        {
+
+            return ExceptionActionResponse(ex);
+        }
     }
 
     #region Private

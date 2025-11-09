@@ -6,21 +6,19 @@ namespace ecomerce.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CountriesController : GenericController<Country>
+public class StatesController : GenericController<State>
 {
-    private readonly ICountriesUnitOfWork _countriesUnitOfWork;
+    private IStateUnitOfWork _stateUnitOfWork;
 
-    public CountriesController(IGenericUnitOfWork<Country> unitOfWork, ICountriesUnitOfWork countriesUnitOfWork)
-        : base(unitOfWork)
+    public StatesController(IGenericUnitOfWork<State> unitOfWork, IStateUnitOfWork stateUnitOfWork) : base(unitOfWork)
     {
-        this._countriesUnitOfWork = countriesUnitOfWork;
+        this._stateUnitOfWork = stateUnitOfWork;
     }
-
 
     [HttpGet]
     public override async Task<IActionResult> GetAsync()
     {
-        var action = await this._countriesUnitOfWork.GetAsync();
+        var action = await this._stateUnitOfWork.GetAsync();
         if (action.WasSuccess)
         {
             return Ok(action.Result);
@@ -32,7 +30,7 @@ public class CountriesController : GenericController<Country>
     [HttpGet("{id}")]
     public override async Task<IActionResult> GetAsync(int id)
     {
-        var action = await this._countriesUnitOfWork.GetAsync(id);
+        var action = await this._stateUnitOfWork.GetAsync(id);
         if (action.WasSuccess)
         {
             return Ok(action.Result);
@@ -40,4 +38,5 @@ public class CountriesController : GenericController<Country>
 
         return NotFound();
     }
+
 }

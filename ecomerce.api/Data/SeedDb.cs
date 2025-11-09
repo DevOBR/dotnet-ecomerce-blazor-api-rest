@@ -16,7 +16,31 @@ public class SeedDb
     {
         await _context.Database.EnsureCreatedAsync();
         await CheckCountriesAsync();
+        await CheckStatesAsync();
+        await CheckCitiessync();
         await CheckCategoriesAsync();
+    }
+
+    private async Task CheckCitiessync()
+    {
+        if (!this._context.Cities.Any())
+        {
+            this._context.Cities.Add(new City { Name = "Apodaca", StateId = 1 });
+            this._context.Cities.Add(new City { Name = "Santa Catarina", StateId = 1 });
+            this._context.Cities.Add(new City { Name = "Puebla", StateId = 2 });
+            this._context.Cities.Add(new City { Name = "Cholula", StateId = 2 });
+            await this._context.SaveChangesAsync();
+        }
+    }
+
+    private async Task CheckStatesAsync()
+    {
+        if (!this._context.States.Any())
+        {
+            this._context.States.Add(new State { Name = "Nuevo Leon", CountryId = 1 });
+            this._context.States.Add(new State { Name = "Puebla", CountryId = 1 });
+            await this._context.SaveChangesAsync();
+        }
     }
 
     private async Task CheckCategoriesAsync()

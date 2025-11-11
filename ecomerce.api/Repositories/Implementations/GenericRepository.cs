@@ -1,5 +1,8 @@
+using System.Reflection.Metadata.Ecma335;
 using ecomerce.api.Data;
+using ecomerce.api.Helpers;
 using ecomerce.api.Repositories.Interfaces;
+using ecomerce.shared;
 using ecomerce.shared.Response;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,19 +12,41 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly DataContext dataContext;
 
-    public DbSet<T> entity { get; }
+    public DbSet<T> _entity { get; }
 
     public GenericRepository(DataContext dataContext)
     {
         this.dataContext = dataContext;
-        this.entity = this.dataContext.Set<T>();
+        this._entity = this.dataContext.Set<T>();
+    }
+
+
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination)
+    {
+        var queryable = this._entity.AsQueryable();
+        return new ActionResponse<IEnumerable<T>>
+        {
+            WasSuccess = true,
+            Result = await queryable.Paginate(pagination).ToListAsync()
+        };
+    }
+
+    public virtual async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+    {
+        var queryable = this._entity.AsQueryable();
+        double count = await queryable.CountAsync();
+        return new ActionResponse<int>
+        {
+            WasSuccess = true,
+            Result = (int)count
+        };
     }
 
     public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync()
         => new ActionResponse<IEnumerable<T>>()
         {
             WasSuccess = true,
-            Result = await this.entity.ToListAsync()
+            Result = await this._entity.ToListAsync()
         };
 
     public virtual async Task<ActionResponse<T>> AddAsync(T entity)
@@ -49,7 +74,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public virtual async Task<ActionResponse<T>> DeleteAsync(int id)
     {
-        var row = await this.entity.FindAsync(id);
+        var row = await this._entity.FindAsync(id);
         if (row is null)
         {
             return new ActionResponse<T>()
@@ -78,7 +103,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public virtual async Task<ActionResponse<T>> GetAsync(int id)
     {
-        var row = await this.entity.FindAsync(id);
+        var row = await this._entity.FindAsync(id);
         if (row is null)
         {
             return new ActionResponse<T>()

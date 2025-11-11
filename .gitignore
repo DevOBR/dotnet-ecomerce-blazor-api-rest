@@ -418,3 +418,5 @@ FodyWeavers.xsd
 *.msp
 .vscode/settings.json
 ecomerce.api/appsettings.json
+ecomerce.api/.DS_Store
+ecomerce.api/Data/.DS_Store

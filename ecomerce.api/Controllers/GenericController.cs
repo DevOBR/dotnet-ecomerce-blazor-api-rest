@@ -1,4 +1,5 @@
 using ecomerce.api.UnitOfWork.Interfaces;
+using ecomerce.shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecomerce.api.Controllers;
@@ -11,6 +12,31 @@ public class GenericController<T> : Controller where T : class
     {
         this._unitOfWork = unitOfWork;
     }
+
+    [HttpGet("paginated")]
+    public virtual async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+    {
+        var action = await this._unitOfWork.GetAsync(pagination);
+        if (action.WasSuccess)
+        {
+            return Ok(action.Result);
+        }
+
+        return BadRequest(action.Message);
+    }
+
+    [HttpGet("totalRecords")]
+    public virtual async Task<IActionResult> GetTotalRecordsAsync([FromQuery] PaginationDTO pagination)
+    {
+        var action = await this._unitOfWork.GetTotalRecordsAsync(pagination);
+        if (action.WasSuccess)
+        {
+            return Ok(action.Result);
+        }
+
+        return BadRequest(action.Message);
+    }
+
 
     [HttpGet]
     public virtual async Task<IActionResult> GetAsync()

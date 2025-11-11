@@ -1,5 +1,6 @@
 using ecomerce.api.Repositories.Interfaces;
 using ecomerce.api.UnitOfWork.Interfaces;
+using ecomerce.shared;
 using ecomerce.shared.Response;
 
 namespace ecomerce.api.UnitOfWork.Implementations;
@@ -12,10 +13,16 @@ public class GenericUnitOfWork<T> : IGenericUnitOfWork<T> where T : class
     {
         this._repository = repository;
     }
+    public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync(PaginationDTO pagination)
+        => await this._repository.GetAsync(pagination);
+    public virtual async Task<ActionResponse<int>> GetTotalRecordsAsync(PaginationDTO pagination)
+        => await this._repository.GetTotalRecordsAsync(pagination);
+
+    public virtual async Task<ActionResponse<T>> UpdateAsync(T entity)
+        => await this._repository.UpdateAsync(entity);
 
     public virtual async Task<ActionResponse<T>> AddAsyc(T entity)
         => await this._repository.AddAsync(entity);
-
     public virtual async Task<ActionResponse<T>> DeleteAsync(int id)
         => await this._repository.DeleteAsync(id);
 
@@ -24,7 +31,4 @@ public class GenericUnitOfWork<T> : IGenericUnitOfWork<T> where T : class
 
     public virtual async Task<ActionResponse<IEnumerable<T>>> GetAsync()
         => await this._repository.GetAsync();
-
-    public virtual async Task<ActionResponse<T>> UpdateAsync(T entity)
-        => await this._repository.UpdateAsync(entity);
 }

@@ -1,4 +1,5 @@
 using ecomerce.api.UnitOfWork.Interfaces;
+using ecomerce.shared;
 using ecomerce.shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,18 @@ public class CountriesController : GenericController<Country>
         : base(unitOfWork)
     {
         this._countriesUnitOfWork = countriesUnitOfWork;
+    }
+
+    [HttpGet("paginated")]
+    public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+    {
+        var action = await this._countriesUnitOfWork.GetAsync(pagination);
+        if (action.WasSuccess)
+        {
+            return Ok(action.Result);
+        }
+
+        return BadRequest(action.Message);
     }
 
 
